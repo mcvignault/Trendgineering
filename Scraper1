@@ -1,0 +1,38 @@
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+
+#two variables enable me to run the entire alphabet or just one letter
+alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","y","z"]
+exalpha = ["b"]
+for letters in alphabet:
+    #holds website to be scraped
+    my_url = "https://www.hockey-reference.com/players/" + letters + "/"
+    #opens and views html code from website
+    thepage = urlopen(my_url)
+    #parses html coding
+    page_soup=BeautifulSoup(thepage,"html.parser")
+
+    #finds all instances of tag
+    PlayerList = page_soup.find_all("div",{"class":"section_content"})
+
+    #define empty variables
+    FinalData=""
+    Players=""
+    #compiles data from table
+    for players in PlayerList:
+        for rows in players.findAll("p",{"class","nhl"}):
+                for active in rows.findAll("strong"):
+                    if len(active)!=0:
+                        Players = Players + "\n" + rows.text.replace(" ",",").replace(".","").replace("-",",").replace("(","").replace(")","")
+            #FinalData = FinalData + "\n" + Players
+
+    #test code
+    print(Players)
+
+    #Headers = "first_name, last_name, html_name\n"
+    #opens file and writes header and data, then closes file
+    filename = letters + ".csv"
+    f = open(filename, "w")
+    #f.write(Headers)
+    f.write(Players[1:])
+    f.close()

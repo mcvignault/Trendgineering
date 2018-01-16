@@ -1,0 +1,50 @@
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+import csv
+
+alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","y","z"]
+exalpha = ["q","r","s","t","u","v","w","y","z"]
+
+for letters in exalpha:
+    filename = letters + ".csv"
+    with open(filename, "r") as csvfile:
+        readCSV = csv.reader(csvfile)
+        
+        for players in readCSV:
+            startyear = int(players[4])
+            endyear = int(players[5])
+            firstname = players[0]
+            lastname = players[1]
+            htmlname = players[3]
+            position = players[6]
+            header = firstname + "," + lastname + "," + position + "\n"
+            if (position == "G"):
+                header2 = "Date,G,Age,Tm,H/A,Opp,Res,DEC,GA,SA,SV,SV%,SO,PIM,TOI\n"
+            else:
+                header2 = "Date,G,Age,Tm,H/A,Opp,Res,G,A,PTS,+/-,PIM,G-EV,G-PP,G-SH,GW,A-EV,A-PP,A-SH,S,S%,SHFT,TOI,HIT,BLK,FOW,FOL,FO%\n"
+            for year in range(startyear,endyear+1):
+                #holds website to be scraped
+                my_url = htmlname + str(year)
+                #opens and views html code from website
+                thepage = urlopen(my_url)
+                #parses html coding
+                page_soup=BeautifulSoup(thepage,"html.parser")
+
+                GameLogSaved = ""
+                GameLog = ""
+    
+                for rows in page_soup.find_all("tr"):
+                    GameLog=""
+                    for data in rows.find_all("td"):
+                        GameLog = GameLog + "," + data.text
+                    if len(GameLog)!=0:
+                        GameLogSaved = GameLogSaved + "\n" + GameLog[1:]
+         
+
+                print(GameLogSaved)
+                filename = lastname + "_" + firstname + "_" + str(year) + ".csv"
+                f = open(filename, "w")
+                f.write(header2)
+                f.write(GameLogSaved[1:])
+                f.write(header)
+                f.close()

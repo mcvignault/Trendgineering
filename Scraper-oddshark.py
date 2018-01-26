@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+# fetch data from oddshark.com and print as CSV
+# NOT WORKING YET!
+
 import simplejson as json
 import urllib.request
 import urllib.parse

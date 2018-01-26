@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
 # fetch data from oddshark.com and print as CSV
-# NOT WORKING YET!
 
 import simplejson as json
 import urllib.request
 import urllib.parse
 
+# TODO: put individual dates instead of hardcoding
 url = 'http://io.oddsshark.com/scores/nhl/2018-01-23'
 
 headers = {
@@ -19,16 +19,14 @@ headers = {
   'Connection'      : 'keep-alive'
   }
 
-# d = {}
 data = urllib.parse.urlencode({})
 data = data.encode('ascii')
-req = urllib.request.Request(url, data, headers)
-print(req)
+req = urllib.request.Request(url, headers=headers)
 
 with urllib.request.urlopen(req) as response:
   data = response.read()
 
-# print(data)
-
 json = json.dumps(data)
+
+# TODO: print selected parts of the data structure as csv
 print(json)

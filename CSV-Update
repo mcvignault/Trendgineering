@@ -25,3 +25,10 @@ with open(filename, "r") as csvfile:
                 #TODO - open player's csv file and add new headings to the first row (i.e. "FPTs","B2B", "3in4",	"TmSTK",	"HTRK", "PPFM"
                       - the idea is to use the info that I already have to create these new columns/data.  I feel that treating the csv
                       files like a dictionary and adding new keys would be the way to go, but not sure how to do that.
+
+
+Here's the shortest way to add a header line to a file:
+
+open("outfile", "w").write("header,line,goes,here\n" + open("infile").read())
+
+Now, there's a copy of the file that may need to be renamed.

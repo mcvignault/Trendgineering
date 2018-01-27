@@ -1,0 +1,27 @@
+import csv
+
+teamname = input("What team is playing?: ")
+
+teamname = str.lower(teamname.replace(" ","-"))
+
+#print(teamname)
+
+filename = teamname + ".csv"
+
+with open(filename, "r") as csvfile:
+    readCSV = csv.reader(csvfile)
+    
+    for players in readCSV:
+        openname=[]
+        opennamesaved=""
+        if len(players)>1:
+            if players[1] != "NAME":
+                openname = players[1].replace(" ","_",1).replace(".","")
+                openname = openname.split("_")
+                #openname = openname[1]+openname[0]
+                openname = openname[1]+"_"+openname[0]
+                playerfile = openname + ".csv"
+                
+                #TODO - open player's csv file and add new headings to the first row (i.e. "FPTs","B2B", "3in4",	"TmSTK",	"HTRK", "PPFM"
+                      - the idea is to use the info that I already have to create these new columns/data.  I feel that treating the csv
+                      files like a dictionary and adding new keys would be the way to go, but not sure how to do that.
